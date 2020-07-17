@@ -24,10 +24,10 @@ def fen_to_tensor(fen):
     castling_tensor = tf.convert_to_tensor(castling_right)
     en_passant = 0 if x[2] == '-' else (ord(x[2][0]) - ord('a') + 1) + (int(x[2][1])//6)*8
     en_passant_tensor = tf.one_hot(tf.convert_to_tensor(en_passant),17,dtype='int32')
-    print(board_array)
+
     return tf.concat([board_tensor,turn_tensor,castling_tensor,en_passant_tensor],0)
 
-sess = tf.compat.v1.Session()
+sess = tf.Session()
 print(sess.run(fen_to_tensor(fen)))
 #This is a lichess neural network
 #this is for nn arch
