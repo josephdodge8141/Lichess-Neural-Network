@@ -66,45 +66,6 @@ class PgnToFen:
         else:
             return self.pgnToFen(moves)
 
-    def pgnFile(self, file):
-        pgnGames = {
-        'failed' : [],
-        'succeeded' : [],
-        }
-        started = False
-        game_info = []
-        pgnMoves = ''
-        for moves in open(file, 'rt').readlines():
-
-            if moves[:1] == '[':
-                #print('game_info line: ', moves)
-                game_info.append(moves)
-                continue
-            if moves[:2] == '1.':
-                started = True
-            if (moves == '\n' or moves == '\r\n') and started:
-                try:
-                    #print('Processing ', game_info[0:6])
-                    pgnToFen = PgnToFen()
-                    pgnToFen.resetBoard()
-                    fens = pgnToFen.moves(pgnMoves).getAllFens()
-                    pgnGames['succeeded'].append((game_info, fens))
-                except ValueError as e:
-                    pgnGames['failed'].append((game_info, '"' + pgnToFen.lastMove + '"', pgnToFen.getFullFen(), e))
-                except TypeError as e:
-                    pgnGames['failed'].append((game_info, '"' + pgnToFen.lastMove + '"', pgnToFen.getFullFen(), e))
-                except IndexError as e:
-                    raise IndexError(game_info, '"' + pgnToFen.lastMove + '"', pgnToFen.getFullFen(), e)
-                    pgnGames['failed'].append((game_info, '"' + pgnToFen.lastMove + '"', pgnToFen.getFullFen(), e))
-                except ZeroDivisionError as e:
-                    pgnGames['failed'].append((game_info, '"' + pgnToFen.lastMove + '"', pgnToFen.getFullFen(), e))
-                finally:
-                    started = False
-                    game_info = []
-                    pgnMoves = ''
-            if(started):
-                pgnMoves = pgnMoves + ' ' + moves.replace('\n', '').replace('\r', '')
-        return pgnGames
 
     def pgnToFen(self, moves):
         try:
