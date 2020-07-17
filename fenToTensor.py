@@ -21,17 +21,11 @@ def fen_to_tensor(fen):
     en_passant = 0 if x[2] == '-' else (ord(x[2][0]) - ord('a') + 1) + (int(x[2][1])//6)*8
     en_passant_tensor = tf.one_hot(tf.convert_to_tensor(en_passant),17,dtype='int32')
     return tf.concat([board_tensor,turn_tensor,castling_tensor,en_passant_tensor],0)
-<<<<<<< HEAD:fenToTensor.py
+
 def pgnToTensor(pgn):
     pgnConverter = pgntofen.PgnToFen()
     pgnConverter.pgnToFen(map(str, pgn.split()))
     fen = pgnConverter.getFullFen()
     return fen_to_tensor(fen)
-print(pgnToTensor('1.b4 a5 2.d3'))
-=======
+#test
 
-sess = tf.compat.v1.Session()
-print(sess.run(fen_to_tensor(fen)))
-#This is a lichess neural network
-#test commit
->>>>>>> master:lichessNN.py
