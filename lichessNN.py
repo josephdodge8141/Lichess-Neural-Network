@@ -30,3 +30,4 @@ def fen_to_tensor(fen):
 sess = tf.compat.v1.Session()
 print(sess.run(fen_to_tensor(fen)))
 #This is a lichess neural network
+#this is for nn arch
