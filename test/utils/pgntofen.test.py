@@ -2,7 +2,7 @@
 # coding=utf8
 import unittest
 import sys
-sys.path.insert(1, '../utils')
+sys.path.insert(1, '../../utils/converters')
 import pgntofen
 
 class PgnToFenTester(unittest.TestCase):

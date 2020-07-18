@@ -4,7 +4,7 @@ import unittest
 import tensorflow as tf
 from string import Template
 import sys
-sys.path.insert(1, '../utils')
+sys.path.insert(1, '../../utils/converters')
 import pgnToTensor
 
 class PgnToFenTester(unittest.TestCase):

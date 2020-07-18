@@ -1,13 +1,5 @@
-PGN to FEN
-=====================
 
-A chess library, where the only purpose is to convert a PGN structur to FEN.
-
-## Usage
-
-The lib exposes several methods, to be used.
-
-### Move
+##### PgnToFen
 
 You can insert one and one move if you want.
 
@@ -39,14 +31,14 @@ fen = pgnConverter.getFullFen()
 
 ### pgnFile
 
-parse a pgnFile that may have sveral pgn games. See `test/Carlsen.png` for an example
+parse a pgnFile that may have sveral pgn games.
 
 #### E.g
 
 ```python
 pgnConverter = pgntofen.PgnToFen()
 pgnConverter.resetBoard()
-file = "test/Carlsen.pgn"
+file = "test/Example.pgn"
 stats =  pgnConverter.pgnFile(file);
 # stats => {
 # 'failed': [<pgntofen-error-obj>, ...],
@@ -59,20 +51,45 @@ stats =  pgnConverter.pgnFile(file);
 # game_info is all the line in the pgn file working as a header before the game (e.g: all lines with [...])
 ```
 
+PgnToTensor
 
-## Speed
-Running 20 000 games with pgntofen takes about 45-50 seconds on a normal laptop (4GB Ram, i7, SSD).
-With chess-python this takes about 6m 15s to 6m 30s.
-So you should expect an 8x improvement at least.
+This will accept any pgn and print out a 1 hot tensor which includes information about the position, whose turn it is, castling rights, and legal enpassants.
 
-The file `fenStats.py` takes either "pgntofen" or "chess-python" as input.
-to test on your computer run `time python fenStats.py pgntofen` and `time python fenStats.py chess-python`.
+### E.g
 
-## Development
+```python
 
-### Watch.sh
-To run the test on each change, you can start the watch.sh script.
-`./watch.sh `pwd` pgntofen.test.py` will run the test script `pgntofen.test.py` on each save to the current dir.
+import pgnToTensor # assumes you have pgntofen.py in the same directory, or you know how to handle python modules.
+pgnConverter = pgnToTensor.PgnToTensor()
+PGNMoves = 'd4 d5'
+tensor = pgnConverter.pgnToTensor(PGNMoves)
+print(tensor)
 
-### Validate a problem
-The python-chess lib is and excellent library. If something goes wrong with this library, see if you can run the same moves with chess-python. If there is a mistake there also, it's probably something wrong with the moves you are putting in.
+# Result will be
+
+#tf.Tensor(
+#[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 0 1
+# 1 1 1 1 1 1 1 1 1 1 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1
+# 1 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+# 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0
+# 0 0 0], shape=(854,), dtype=int32)
+```
