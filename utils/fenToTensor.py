@@ -29,3 +29,4 @@ def pgnToTensor(pgn):
     return fen_to_tensor(fen)
 
 
+#sup
