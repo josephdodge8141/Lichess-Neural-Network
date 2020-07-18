@@ -1,7 +1,8 @@
 #!/bin/python
 # coding=utf8
 import unittest
-
+import sys
+sys.path.insert(1, '../utils')
 import pgntofen
 
 class PgnToFenTester(unittest.TestCase):
@@ -250,14 +251,6 @@ class PgnToFenTester(unittest.TestCase):
        pgnConverter.moves(moves.split(' '));
        correctFen = '6kr/5p2/P5r1/4Q3/7K/2P4P/7P/8 w - -'
        self.assertEqual(correctFen, pgnConverter.getFullFen())
-
-    def test_file_accecpt_file(self):
-       pgnConverter = pgntofen.PgnToFen()
-       pgnConverter.resetBoard()
-       file = "test/Carlsen.pgn"
-       stats =  pgnConverter.pgnFile(file);
-       self.assertEqual(len(stats['failed']), 0)
-       self.assertEqual(len(stats['succeeded']), 1974)
 
     def test_moves_accecpt_str(self):
        pgnConverter = pgntofen.PgnToFen()
