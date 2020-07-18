@@ -1,6 +1,6 @@
-##### Naming Patterns
+## Naming Patterns
 
-## Naming things is hard. Make sure your code is readable and has no magic numbers.
+#### Naming things is hard. Make sure your code is readable and has no magic numbers.
 
 * Folders: Folders should be one word that is lowercased. If it cannot be one word then it is probably not general enough for a folder
 * Pages: Pages are going to be named the same as the class they contain using camelCase. If there is more than one class per page, consider separating them into different pages.

@@ -1,6 +1,6 @@
-#### Page Structure
+## Page Structure
 
-## Src and Test Pages
+#### Src and Test Pages
 
 * Class
     * Method
