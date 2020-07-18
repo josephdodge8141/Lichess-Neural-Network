@@ -5,8 +5,8 @@ You can insert one and one move if you want.
 
 #### E.g
 ```python
-import pgntofen # assumes you have pgntofen.py in the same directory, or you know how to handle python modules.
-pgnConverter = pgntofen.PgnToFen()
+import pgnToFen # assumes you have pgnToFen.py in the same directory, or you know how to handle python modules.
+pgnConverter = pgnToFen.PgnToFen()
 pgnConverter.move('d4')
 fen = pgnConverter.getFullFen()
 #fen will be 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b - KQkq'
@@ -21,8 +21,8 @@ if it'a and array of strings, you may only send the actulle moves (`['e4', 'd5',
 #### E.g
 
 ```python
-import pgntofen # assumes you have pgntofen.py in the same directory, or you know how to handle python modules.
-pgnConverter = pgntofen.PgnToFen()
+import pgnToFen # assumes you have pgnToFen.py in the same directory, or you know how to handle python modules.
+pgnConverter = pgnToFen.PgnToFen()
 PGNMoves = 'd4 d5'
 pgnConverter.pgnToFen(PGNMoves.split(''))
 fen = pgnConverter.getFullFen()
@@ -36,17 +36,17 @@ parse a pgnFile that may have sveral pgn games.
 #### E.g
 
 ```python
-pgnConverter = pgntofen.PgnToFen()
+pgnConverter = pgnToFen.PgnToFen()
 pgnConverter.resetBoard()
 file = "test/Example.pgn"
 stats =  pgnConverter.pgnFile(file);
 # stats => {
-# 'failed': [<pgntofen-error-obj>, ...],
+# 'failed': [<pgnToFen-error-obj>, ...],
 # 'succeeded': [<game-obj>, ...]
 # }
 
 # a game-obj: (game_info, fens)
-# pgntofen-error-obj: (game_info, lastMove, fen, error)
+# pgnToFen-error-obj: (game_info, lastMove, fen, error)
 # fens: array of fen
 # game_info is all the line in the pgn file working as a header before the game (e.g: all lines with [...])
 ```
@@ -59,7 +59,7 @@ This will accept any pgn and print out a 1 hot tensor which includes information
 
 ```python
 
-import pgnToTensor # assumes you have pgntofen.py in the same directory, or you know how to handle python modules.
+import pgnToTensor # assumes you have pgnToFen.py in the same directory, or you know how to handle python modules.
 pgnConverter = pgnToTensor.PgnToTensor()
 PGNMoves = 'd4 d5'
 tensor = pgnConverter.pgnToTensor(PGNMoves)

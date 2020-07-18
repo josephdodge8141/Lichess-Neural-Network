@@ -1,4 +1,4 @@
-import pgntofen
+import pgnToFen
 import tensorflow as tf
 
 class PgnToTensor:
@@ -13,7 +13,7 @@ class PgnToTensor:
         return line
 
     def pgn_to_tensor(self, pgn):
-        pgnConverter = pgntofen.PgnToFen()
+        pgnConverter = pgnToFen.PgnToFen()
         pgnConverter.pgnToFen(map(str, pgn.split()))
         fen = pgnConverter.getFullFen().split()
         board_array =  [self.fill_empty_squares(i) for i in fen[0].split('/')]
