@@ -27,5 +27,5 @@ def pgnToTensor(pgn):
     pgnConverter.pgnToFen(map(str, pgn.split()))
     fen = pgnConverter.getFullFen()
     return fen_to_tensor(fen)
-#test
+
 
