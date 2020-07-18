@@ -1,7 +1,8 @@
 #!/bin/python
 # coding=utf8
 import unittest
-
+import sys
+sys.path.insert(1, '../utils')
 import pgntofen
 
 class PgnToFenTester(unittest.TestCase):
