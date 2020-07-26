@@ -3,12 +3,13 @@ import createDataSet
 
 
 #creates a dataset of position tensors and a dataset of result labels
-labeledData = tf.data.Dataset.from_generator(createDataSet.genData,(tf.string,tf.uint8))
-labeledData = labeledData.map(createDataSet.converter)
+
+labeledData = tf.data.Dataset.from_generator(createDataSet.Generator().gen_data,(tf.string,tf.uint8))
+labeledData = labeledData.map(createDataSet.Generator().converter)
 labeledData = labeledData.shuffle(100000, reshuffle_each_iteration=True).batch(512)
 
-valData = tf.data.Dataset.from_generator(createDataSet.genValData,(tf.string,tf.uint8))
-valData = valData.map(createDataSet.converter).shuffle(100000).batch(512)
+valData = tf.data.Dataset.from_generator(createDataSet.Generator().gen_val_data,(tf.string,tf.uint8))
+valData = valData.map(createDataSet.Generator().converter).shuffle(100000).batch(512)
 
 
 print('Finished loading data')
