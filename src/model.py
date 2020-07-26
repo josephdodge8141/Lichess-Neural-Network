@@ -17,31 +17,31 @@ print('Finished loading data')
 
 inputs = tf.keras.Input(shape=(8,8,14))
 
-x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(inputs)
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer= tf.keras.regularizers.l2(.005),bias_regularizer= tf.keras.regularizers.l2(.005))(inputs)
 x = tf.keras.layers.BatchNormalization()(x)
 y = tf.keras.layers.ReLU()(x)
 
-x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(y)
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer= tf.keras.regularizers.l2(.005),bias_regularizer= tf.keras.regularizers.l2(.005))(y)
 x = tf.keras.layers.BatchNormalization()(x)
 x = tf.keras.layers.ReLU()(x)
-x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(x)
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer= tf.keras.regularizers.l2(.005),bias_regularizer= tf.keras.regularizers.l2(.005))(x)
 x = tf.keras.layers.BatchNormalization()(x)
 x += y
 y = tf.keras.layers.ReLU()(x)
 
-x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(y)
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer= tf.keras.regularizers.l2(.005),bias_regularizer= tf.keras.regularizers.l2(.005))(y)
 x = tf.keras.layers.BatchNormalization()(x)
 x = tf.keras.layers.ReLU()(x)
-x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(x)
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer= tf.keras.regularizers.l2(.005),bias_regularizer= tf.keras.regularizers.l2(.005))(x)
 x = tf.keras.layers.BatchNormalization()(x)
 x += y
 y = tf.keras.layers.ReLU()(x)
 
 
-x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(y)
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer= tf.keras.regularizers.l2(.005),bias_regularizer= tf.keras.regularizers.l2(.005))(y)
 x = tf.keras.layers.BatchNormalization()(x)
 x = tf.keras.layers.ReLU()(x)
-x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(x)
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer= tf.keras.regularizers.l2(.005),bias_regularizer= tf.keras.regularizers.l2(.005))(x)
 x = tf.keras.layers.BatchNormalization()(x)
 x += y
 y = tf.keras.layers.ReLU()(x)
@@ -52,7 +52,7 @@ y = tf.keras.layers.ReLU()(x)
 
 
 x = tf.keras.layers.Dense(64,activation='relu')(y)
-outputs = tf.keras.layers.Dense(1,activation='tanh')(x)
+outputs = tf.keras.layers.Dense(1,activation='hard_sigmoid')(x)
 
 model = tf.keras.Model(inputs=inputs,outputs=outputs)
 model.summary()
