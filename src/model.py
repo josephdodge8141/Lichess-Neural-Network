@@ -15,7 +15,8 @@ valData = valData.map(createDataSet.Generator().converter).shuffle(100000).batch
 print('Finished loading data')
 
 
-inputs = tf.keras.Input(shape=(8,8,14))
+model = tf.keras.Sequential()
+model.add(tf.keras.Input(shape=(8,8,14)))
 model.add(tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2',activation='relu'))
 model.add(tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2',activation='relu'))
 model.add(tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2',activation='relu'))
