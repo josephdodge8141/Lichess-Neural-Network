@@ -17,11 +17,12 @@ class PgnToTensor:
         pgnConverter.pgnToFen(map(str, pgn.split()))
         fen = pgnConverter.getFullFen().split()
         boardArray =  [self.fill_empty_squares(i) for i in fen[0].split('/')]
-        boardTensor = tf.reshape(tf.one_hot(tf.convert_to_tensor(boardArray),13,axis=2,dtype='int32'),[832])
+        boardTensor = tf.one_hot(tf.convert_to_tensor(boardArray),13,axis=2,dtype='int32')
         whoToPlay =  1 if fen[1] == 'w' else 0
         turnTensor = tf.convert_to_tensor([whoToPlay],dtype='int32')
         castlingRight = [int(i in fen[3]) for i in ['K','Q','k','q']]
         castlingTensor = tf.convert_to_tensor(castlingRight)
         enPassant = 0 if fen[2] == '-' else (ord(fen[2][0]) - ord('a') + 1) + (int(fen[2][1])//6)*8
         enPassantTensor = tf.one_hot(tf.convert_to_tensor(enPassant),17,dtype='int32')
-        return tf.concat([boardTensor,turnTensor,castlingTensor,enPassantTensor],0)
+        miscData = tf.reshape(tf.concat([(*[turnTensor]*43),castlingTensor, enPassantTensor],axis=0),(8,8,1))
+        return tf.concat([boardTensor,miscData], axis=2)
