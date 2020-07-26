@@ -14,24 +14,16 @@ valData = valData.map(createDataSet.converter).shuffle(100000).batch(512)
 print('Finished loading data')
 
 
-model = tf.keras.Sequential()
-model.add(tf.keras.Input(shape=(854,)))
-model.add(tf.keras.layers.Reshape((14,61,1)))
-model.add(tf.keras.layers.Conv2D(64,(3,3)))
-model.add(tf.keras.layers.MaxPool2D())
-model.add(tf.keras.layers.Reshape((24,29,16)))
-model.add(tf.keras.layers.Conv2D(64,(3,3)))
-model.add(tf.keras.layers.MaxPool2D())
-model.add(tf.keras.layers.Conv2D(64,(3,3)))
-model.add(tf.keras.layers.MaxPool2D())
-model.add(tf.keras.layers.Reshape((8,10,16)))
-model.add(tf.keras.layers.Conv2D(64,(3,3)))
+inputs = tf.keras.Input(shape=(8,8,14))
+model.add(tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2',activation='relu'))
+model.add(tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2',activation='relu'))
+model.add(tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2',activation='relu'))
 model.add(tf.keras.layers.Flatten())
-model.add(tf.keras.layers.Dense(3))
+model.add(tf.keras.layers.Dense(1,activation='sigmoid'))
 model.summary()
 
 
-model.compile(optimizer=tf.keras.optimizers.Adam(),loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True), metrics=[tf.keras.metrics.TopKCategoricalAccuracy(1)])
+model.compile(optimizer=tf.keras.optimizers.Adam(),loss=tf.keras.losses.MeanSquaredError(), metrics=[tf.keras.metrics.MeanAbsoluteError(),tf.keras.metrics.RootMeanSquaredError()])
 
 history = model.fit(labeledData,epochs=3,verbose=1,validation_data=valData)
 
