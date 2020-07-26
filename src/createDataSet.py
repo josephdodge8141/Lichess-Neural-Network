@@ -15,7 +15,7 @@ class Generator:
 				while len(y) > 0:
 					line.extend(y)
 					y = f.readline().split()
-				key = {'1-0': 1 ,'0-1': 0 ,'1/2-1/2': .5}
+				key = {'1-0': 1 ,'0-1': -1 ,'1/2-1/2': 0}
 				if len(line) > 10 and line[-1] in key:
 					for i in range((len(line)-1)//2):#This range comes from each full turn being comprised of 
 						yield (' '.join(line[:i*2+1]),key[line[-1]]) #the number of the turn, whites move, and blacks move. Subract 1 because the score at the end
@@ -34,7 +34,7 @@ class Generator:
 				while len(y) > 0:
 					line.extend(y)
 					y = f.readline().split()
-				key = {'1-0': 1 ,'0-1': 0 ,'1/2-1/2': .5}
+				key = {'1-0': 1 ,'0-1': -1 ,'1/2-1/2': 0}
 				if len(line) > 10 and line[-1] in key:
 					for i in range((len(line)-1)//2):#This range comes from each full turn being comprised of 
 						yield (' '.join(line[:i*2+1]),key[line[-1]]) #the number of the turn, whites move, and blacks move. Subract 1 because the score at the end
@@ -43,6 +43,6 @@ class Generator:
 				break
 
 	def converter(self, pos, label):
-		x = tf.dtypes.cast(pgnToTensor.PgnToTensor().pgn_to_tensor(str(pos)),tf.uint8)
+		x = tf.dtypes.cast(pgnToTensor.PgnToTensor().pgn_to_tensor(str(pos)),tf.int8)
 		y = tf.convert_to_tensor(label)
 		return (x,y)

@@ -15,13 +15,46 @@ valData = valData.map(createDataSet.Generator().converter).shuffle(100000).batch
 print('Finished loading data')
 
 
-model = tf.keras.Sequential()
-model.add(tf.keras.Input(shape=(8,8,14)))
-model.add(tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2',activation='relu'))
-model.add(tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2',activation='relu'))
-model.add(tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2',activation='relu'))
-model.add(tf.keras.layers.Flatten())
-model.add(tf.keras.layers.Dense(1,activation='sigmoid'))
+inputs = tf.keras.Input(shape=(8,8,14))
+
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(inputs)
+x = tf.keras.layers.BatchNormalization()(x)
+y = tf.keras.layers.ReLU()(x)
+
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(y)
+x = tf.keras.layers.BatchNormalization()(x)
+x = tf.keras.layers.ReLU()(x)
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(x)
+x = tf.keras.layers.BatchNormalization()(x)
+x += y
+y = tf.keras.layers.ReLU()(x)
+
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(y)
+x = tf.keras.layers.BatchNormalization()(x)
+x = tf.keras.layers.ReLU()(x)
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(x)
+x = tf.keras.layers.BatchNormalization()(x)
+x += y
+y = tf.keras.layers.ReLU()(x)
+
+
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(y)
+x = tf.keras.layers.BatchNormalization()(x)
+x = tf.keras.layers.ReLU()(x)
+x = tf.keras.layers.Conv2D(64,(3,3),padding='same',activity_regularizer='l2',bias_regularizer='l2')(x)
+x = tf.keras.layers.BatchNormalization()(x)
+x += y
+y = tf.keras.layers.ReLU()(x)
+
+x = tf.keras.layers.Conv2D(1,(1,1))(y)
+x = tf.keras.layers.BatchNormalization()(x)
+y = tf.keras.layers.ReLU()(x)
+
+
+x = tf.keras.layers.Dense(64,activation='relu')(y)
+outputs = tf.keras.layers.Dense(1,activation='tanh')(x)
+
+model = tf.keras.Model(inputs=inputs,outputs=outputs)
 model.summary()
 
 
