@@ -6,10 +6,10 @@ import createDataSet
 
 labeledData = tf.data.Dataset.from_generator(createDataSet.Generator().gen_data,(tf.string,tf.int32))
 labeledData = labeledData.map(createDataSet.Generator().converter)
-labeledData = labeledData.shuffle(10000, reshuffle_each_iteration=True).batch(512)
+labeledData = labeledData.shuffle(100000, reshuffle_each_iteration=True).batch(512)
 
 valData = tf.data.Dataset.from_generator(createDataSet.Generator().gen_val_data,(tf.string,tf.int32))
-valData = valData.map(createDataSet.Generator().converter).shuffle(10000).batch(512)
+valData = valData.map(createDataSet.Generator().converter).shuffle(100000).batch(512)
 
 print('Finished loading data')
 
