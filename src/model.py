@@ -16,27 +16,27 @@ print('Finished loading data')
 
 inputs = tf.keras.Input(shape=(8,8,35))
 
-a = tf.keras.layers.Conv2D(16,(3,3))(inputs)
+a = tf.keras.layers.Conv2D(8,(3,3))(inputs)
 a = tf.keras.layers.BatchNormalization()(a)
 a = tf.keras.layers.ReLU()(a)
 
-b = tf.keras.layers.Conv2D(16,(3,3))(inputs)
+b = tf.keras.layers.Conv2D(8,(3,3))(inputs)
 b = tf.keras.layers.BatchNormalization()(b)
 b = tf.keras.layers.ReLU()(b)
 
-a1= tf.keras.layers.Conv2D(16,(3,3))(a)
+a1= tf.keras.layers.Conv2D(8,(3,3))(a)
 a1 = tf.keras.layers.BatchNormalization()(a1)
 a1 = tf.keras.layers.ReLU()(a1)
 
-a2 = tf.keras.layers.Conv2D(16,(3,3))(a)
+a2 = tf.keras.layers.Conv2D(8,(3,3))(a)
 a2 = tf.keras.layers.BatchNormalization()(a2)
 a2 = tf.keras.layers.ReLU()(a2)
 
-b1 = tf.keras.layers.Conv2D(16,(3,3))(b)
+b1 = tf.keras.layers.Conv2D(8,(3,3))(b)
 b1 = tf.keras.layers.BatchNormalization()(b1)
 b1 = tf.keras.layers.ReLU()(b1)
 
-b2 = tf.keras.layers.Conv2D(16,(3,3))(b)
+b2 = tf.keras.layers.Conv2D(8,(3,3))(b)
 b2 = tf.keras.layers.BatchNormalization()(b2)
 b2 = tf.keras.layers.ReLU()(b2)
 
@@ -45,35 +45,39 @@ y = tf.keras.layers.Concatenate(axis=-3)([b2,a2])
 z = tf.keras.layers.Concatenate(axis=-2)([x,y])
 
 
-
-a = tf.keras.layers.Conv2D(16,(3,3))(z)
+a = tf.keras.layers.Conv2D(8,(3,3))(z)
 a = tf.keras.layers.BatchNormalization()(a)
 a = tf.keras.layers.ReLU()(a)
 
-b = tf.keras.layers.Conv2D(16,(3,3))(z)
-b = tf.keras.layers.BatchNormalization()(b)
-b = tf.keras.layers.ReLU()(b)
-
-a1= tf.keras.layers.Conv2D(16,(3,3))(a)
+a1= tf.keras.layers.Conv2D(8,(3,3))(a)
 a1 = tf.keras.layers.BatchNormalization()(a1)
 a1 = tf.keras.layers.ReLU()(a1)
 
-a2 = tf.keras.layers.Conv2D(16,(3,3))(a)
+a2 = tf.keras.layers.Conv2D(8,(3,3))(a)
 a2 = tf.keras.layers.BatchNormalization()(a2)
 a2 = tf.keras.layers.ReLU()(a2)
 
-b1 = tf.keras.layers.Conv2D(16,(3,3))(b)
-b1 = tf.keras.layers.BatchNormalization()(b1)
-b1 = tf.keras.layers.ReLU()(b1)
-
-b2 = tf.keras.layers.Conv2D(16,(3,3))(b)
-b2 = tf.keras.layers.BatchNormalization()(b2)
-b2 = tf.keras.layers.ReLU()(b2)
-
-x = tf.keras.layers.Concatenate(axis=-3)([a1,b1])
-y = tf.keras.layers.Concatenate(axis=-3)([b2,a2])
+z1 = tf.keras.layers.MaxPool2D(pool_size=(2,2))(z)
+x = tf.keras.layers.Concatenate(axis=-3)([a1,z1])
+y = tf.keras.layers.Concatenate(axis=-3)([z1,a2])
 z = tf.keras.layers.Concatenate(axis=-2)([x,y])
 
+a = tf.keras.layers.Conv2D(8,(3,3))(z)
+a = tf.keras.layers.BatchNormalization()(a)
+a = tf.keras.layers.ReLU()(a)
+
+a1= tf.keras.layers.Conv2D(8,(3,3))(a)
+a1 = tf.keras.layers.BatchNormalization()(a1)
+a1 = tf.keras.layers.ReLU()(a1)
+
+a2 = tf.keras.layers.Conv2D(8,(3,3))(a)
+a2 = tf.keras.layers.BatchNormalization()(a2)
+a2 = tf.keras.layers.ReLU()(a2)
+
+z2 = tf.keras.layers.MaxPool2D(pool_size=(2,2))(z)
+x = tf.keras.layers.Concatenate(axis=-3)([a1,z1])
+y = tf.keras.layers.Concatenate(axis=-3)([z2,a2])
+z = tf.keras.layers.Concatenate(axis=-2)([x,y])
 
 x = tf.keras.layers.Flatten()(z)
 outputs = tf.keras.layers.Dense(1,activation='tanh')(x)
