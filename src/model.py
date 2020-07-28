@@ -1,8 +1,11 @@
 import tensorflow as tf
 import createDataSet
-
+from datetime import datetime
 
 #creates a dataset of position tensors and a dataset of result labels
+
+logdir="logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
 
 labeledData = tf.data.Dataset.from_generator(createDataSet.Generator().gen_data,(tf.string,tf.int32))
 labeledData = labeledData.map(createDataSet.Generator().converter)
@@ -30,7 +33,6 @@ model.summary()
 
 model.compile(optimizer=tf.keras.optimizers.Adam(),loss=tf.keras.losses.MeanSquaredError(), metrics=[tf.keras.metrics.MeanAbsoluteError(),tf.keras.metrics.RootMeanSquaredError()])
 
-history = model.fit(labeledData,epochs=3,verbose=1,validation_data=valData)
+history = model.fit(labeledData,epochs=100,verbose=1,validation_data=valData, callbacks=[tensorboard_callback])
 
 print(history.history)
-
