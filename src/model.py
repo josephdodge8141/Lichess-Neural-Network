@@ -1,95 +1,30 @@
 import tensorflow as tf
-import createDataSet
-from datetime import datetime
 
 #creates a dataset of position tensors and a dataset of result labels
+initializer = tf.keras.initializers.HeNormal()
+regularizer = tf.keras.regularizers.L1(l1=.001)
+inputs = tf.keras.Input(shape=(8,8,19))
+filters = 16
 
-logdir="logs/fit/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
+x = tf.keras.layers.Conv2D(filters,(3,3),padding='same',kernel_regularizer=regularizer, bias_regularizer=regularizer, kernel_initializer=initializer)(inputs)
+x = tf.keras.layers.BatchNormalization()(x)
+x = tf.keras.layers.ReLU()(x)
 
-labeledData = tf.data.Dataset.from_generator(createDataSet.Generator().gen_data,(tf.string,tf.int32))
-labeledData = labeledData.map(createDataSet.Generator().converter)
-labeledData = labeledData.shuffle(100000, reshuffle_each_iteration=True).batch(512)
-
-valData = tf.data.Dataset.from_generator(createDataSet.Generator().gen_val_data,(tf.string,tf.int32))
-valData = valData.map(createDataSet.Generator().converter).shuffle(100000).batch(512)
-
-print('Finished loading data')
-
-
-inputs = tf.keras.Input(shape=(8,8,35))
-
-a = tf.keras.layers.Conv2D(8,(3,3))(inputs)
-a = tf.keras.layers.BatchNormalization()(a)
-a = tf.keras.layers.ReLU()(a)
-
-b = tf.keras.layers.Conv2D(8,(3,3))(inputs)
-b = tf.keras.layers.BatchNormalization()(b)
-b = tf.keras.layers.ReLU()(b)
-
-a1= tf.keras.layers.Conv2D(8,(3,3))(a)
-a1 = tf.keras.layers.BatchNormalization()(a1)
-a1 = tf.keras.layers.ReLU()(a1)
-
-a2 = tf.keras.layers.Conv2D(8,(3,3))(a)
-a2 = tf.keras.layers.BatchNormalization()(a2)
-a2 = tf.keras.layers.ReLU()(a2)
-
-b1 = tf.keras.layers.Conv2D(8,(3,3))(b)
-b1 = tf.keras.layers.BatchNormalization()(b1)
-b1 = tf.keras.layers.ReLU()(b1)
-
-b2 = tf.keras.layers.Conv2D(8,(3,3))(b)
-b2 = tf.keras.layers.BatchNormalization()(b2)
-b2 = tf.keras.layers.ReLU()(b2)
-
-x = tf.keras.layers.Concatenate(axis=-3)([a1,b1])
-y = tf.keras.layers.Concatenate(axis=-3)([b2,a2])
-z = tf.keras.layers.Concatenate(axis=-2)([x,y])
+x = tf.keras.layers.BatchNormalization()(x)
+x = tf.keras.layers.ReLU()(x)
+x = tf.keras.layers.Conv2D(filters,(3,3),padding='same',kernel_regularizer=regularizer, bias_regularizer=regularizer, kernel_initializer=initializer)(x)
 
 
-a = tf.keras.layers.Conv2D(8,(3,3))(z)
-a = tf.keras.layers.BatchNormalization()(a)
-a = tf.keras.layers.ReLU()(a)
+x = tf.keras.layers.BatchNormalization()(x)
+x = tf.keras.layers.ReLU()(x)
+x = tf.keras.layers.Flatten()(x)
 
-a1= tf.keras.layers.Conv2D(8,(3,3))(a)
-a1 = tf.keras.layers.BatchNormalization()(a1)
-a1 = tf.keras.layers.ReLU()(a1)
 
-a2 = tf.keras.layers.Conv2D(8,(3,3))(a)
-a2 = tf.keras.layers.BatchNormalization()(a2)
-a2 = tf.keras.layers.ReLU()(a2)
-
-z1 = tf.keras.layers.MaxPool2D(pool_size=(2,2))(z)
-x = tf.keras.layers.Concatenate(axis=-3)([a1,z1])
-y = tf.keras.layers.Concatenate(axis=-3)([z1,a2])
-z = tf.keras.layers.Concatenate(axis=-2)([x,y])
-
-a = tf.keras.layers.Conv2D(8,(3,3))(z)
-a = tf.keras.layers.BatchNormalization()(a)
-a = tf.keras.layers.ReLU()(a)
-
-a1= tf.keras.layers.Conv2D(8,(3,3))(a)
-a1 = tf.keras.layers.BatchNormalization()(a1)
-a1 = tf.keras.layers.ReLU()(a1)
-
-a2 = tf.keras.layers.Conv2D(8,(3,3))(a)
-a2 = tf.keras.layers.BatchNormalization()(a2)
-a2 = tf.keras.layers.ReLU()(a2)
-
-z2 = tf.keras.layers.MaxPool2D(pool_size=(2,2))(z)
-x = tf.keras.layers.Concatenate(axis=-3)([a1,z1])
-y = tf.keras.layers.Concatenate(axis=-3)([z2,a2])
-z = tf.keras.layers.Concatenate(axis=-2)([x,y])
-
-x = tf.keras.layers.Flatten()(z)
-outputs = tf.keras.layers.Dense(1,activation='tanh')(x)
+outputs = tf.keras.layers.Dense(3,kernel_regularizer=regularizer, bias_regularizer=regularizer, kernel_initializer=initializer)(x)
 
 model = tf.keras.Model(inputs=inputs,outputs=outputs)
+
+model.compile(optimizer=tf.keras.optimizers.Nadam(learning_rate=.01),loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True), metrics=[tf.keras.metrics.CategoricalAccuracy()])
 model.summary()
+model.save('current_model.h5')
 
-model.compile(optimizer=tf.keras.optimizers.Adam(),loss=tf.keras.losses.MeanSquaredError(), metrics=[tf.keras.metrics.MeanAbsoluteError(),tf.keras.metrics.RootMeanSquaredError()])
-
-history = model.fit(labeledData,epochs=200,verbose=1,validation_data=valData,callbacks=[tensorboard_callback])
-
-print(history.history)
