@@ -10,7 +10,7 @@ class PgnToTensor:
       pgn = io.StringIO(rawPgn)
       game = chess.pgn.read_game(pgn)
       board = game.board()
-      for move in game.main_line():
+      for move in game.mainline_moves():
         board.push(move)
       return board.fen()
 
@@ -42,7 +42,7 @@ class PgnToTensor:
       return tf.convert_to_tensor(arr)
 
     def pgn_to_tensor(self, pgn):
-        fen = self.pgn_to_fen(pgn).split()
+        fen = pgn.split()
         boardArray =  [self.fill_empty_squares(i) for i in fen[0].split('/')]
         boardTensor = tf.one_hot(tf.convert_to_tensor(boardArray),13,axis=2,dtype='int32')
         whoToPlay =  1 if fen[1] == 'w' else 0
@@ -53,5 +53,4 @@ class PgnToTensor:
             enPassantTensor = tf.convert_to_tensor([*[[0]*8]*8])
         else:
             enPassantTensor = self.en_passant_helper([int(fen[2][1])//6, ord(fen[2][0]) - ord('a')])
-
         return tf.concat([boardTensor,castlingTensor,tf.stack([turnTensor,enPassantTensor],axis=2)], axis=2)

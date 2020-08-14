@@ -12,13 +12,17 @@ tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
 
 reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_delta=.0000001,verbose=1)
 
-labeledData = tf.data.Dataset.from_generator(newGenerator.testGenerator().test_gen_data,(tf.string,tf.int32))
-labeledData = labeledData.map(createDataSet.Generator().converter)
+labeledData = tf.data.Dataset.from_generator(newGenerator.testGenerator().test_gen_data,(tf.int32,tf.int32))
+for i in labeledData.take(1):
+	tf.print(i,summarize=-1)
 labeledData = labeledData.shuffle(1000000).batch(512)
 
-valData = tf.data.Dataset.from_generator(newGenerator.testGenerator().test_gen_val_data,(tf.string,tf.int32))
-valData = valData.map(createDataSet.Generator().converter).batch(512)
 
+valData = tf.data.Dataset.from_generator(newGenerator.testGenerator().test_gen_val_data,(tf.int32,tf.int32))
+valData = valData.batch(512)
+
+
+'''
 model = tf.keras.models.load_model('current_model.h5')
 
 
@@ -34,3 +38,4 @@ plt.xlabel('Epoch')
 plt.ylabel('AbsoluteError')
 plt.ylim([0, 1.5])
 plt.legend(loc='lower right')
+'''
