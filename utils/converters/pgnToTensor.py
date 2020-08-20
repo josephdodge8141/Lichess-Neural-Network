@@ -52,5 +52,5 @@ class PgnToTensor:
         if fen[3] == '-':
             enPassantTensor = tf.convert_to_tensor([*[[0]*8]*8])
         else:
-            enPassantTensor = self.en_passant_helper([int(fen[2][1])//6, ord(fen[2][0]) - ord('a')])
+            enPassantTensor = self.en_passant_helper([int(fen[3][1])//6, ord(fen[3][0]) - ord('a')])
         return tf.concat([boardTensor,castlingTensor,tf.stack([turnTensor,enPassantTensor],axis=2)], axis=2)
